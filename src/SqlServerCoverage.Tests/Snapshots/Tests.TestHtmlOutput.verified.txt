@@ -1,0 +1,112 @@
+﻿
+<html>
+    <head>
+        <title>SqlServerCoverage Code Coverage Results</title>
+        <style>
+            :root{
+                --text: #333333;
+                --text-med: #888888;
+                --text-light: #cccccc;
+                --text-lighter: #eeeeee;
+                --blue: #3498db;
+                --dark-blue: #2980b9;
+                --yellow: #ffeaa7;
+                --red: #e45748;
+                --green: #38cc51;
+                --border-radius: 3px;
+            }
+            body{
+                font-family: "Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
+                line-height: 1.5;
+                font-size: 1em;
+                color: var(--text);
+                margin: 10px 50px;
+                -webkit-text-size-adjust: 100 %;
+            }
+            a{
+                color:var(--blue);
+                background-color: transparent;
+            }
+            a:visited{
+                color:var(--dark-blue);
+            }
+            hr{
+                border: 1px solid var(--text-med);
+                border-bottom: 0px;
+                height: 0px;
+            }
+            mark{
+                background-color: var(--yellow);
+                color:#333333;
+            }
+            mark.red{ background-color: var(--red); }
+            mark.green{ background-color: var(--green); }
+            mark.blue{ background-color: var(--blue); }
+            pre{
+                font-family: monospace;
+                border: 1px solid var(--text-light);
+                background-color: var(--text-lighter);
+                padding: 0.5em;
+                border-radius: var(--border-radius);
+                font-size: 1em;
+                white-space: pre-wrap;
+                word-wrap: break-word;
+            }
+
+            table{
+                border-collapse: collapse;
+            }
+            table,
+            table th,
+            table td{
+                border-bottom: 1px solid var(--text-light);
+                padding: 0.33em 0.66em;
+                text-align: left;
+                vertical-align: middle;
+            }
+            .right{
+                float: right;
+            }
+        </style>
+    </head>
+    <body id="top">
+        <table>
+            <thead>
+                <td>Object Name</td>
+                <td>Statement Count</td>
+                <td>Covered Statement Count</td>
+                <td>Coverage %</td>
+            </thead>
+            <tr>
+                <td><b>Total</b></td>
+                <td>3</td>
+                <td>2</td>
+                <td>66.67</td>
+            </tr>
+            <tr>
+                <td><a href="#[dbo].[TestProcedureForCoverage]">[dbo].[TestProcedureForCoverage]</a></td>
+                <td>3</td>
+                <td>2</td>
+                <td>66.67</td>
+            </tr>
+        </table>
+        <hr />
+        <details>
+            <summary><a name="[dbo].[TestProcedureForCoverage]">[dbo].[TestProcedureForCoverage]</a> <a href="#top" class=right>Scroll Top</a></summary>
+            <pre>CREATE PROC TestProcedureForCoverage
+    (@value int)
+AS
+BEGIN
+    <mark class=green>IF (@value = 1)</mark>
+        BEGIN
+            <mark class=green>SELECT 10</mark>
+        END
+    ELSE
+        BEGIN
+            <mark class=red>SELECT 20</mark>
+        END
+END
+                </pre>
+            </details>
+    </body>
+</html>

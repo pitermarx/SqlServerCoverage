@@ -1,0 +1,91 @@
+﻿
+<CoverageSession
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Summary
+        numSequencePoints="3"
+        visitedSequencePoints="2"
+        sequenceCoverage="66.66666666666666"
+        numBranchPoints="0"
+        visitedBranchPoints="0"
+        branchCoverage="0.0"
+        maxCyclomaticComplexity="0"
+        minCyclomaticComplexity="0" />
+    <Modules>
+        <Module hash="ED-DE-ED-DE-ED-DE-ED-DE-ED-DE-ED-DE-ED-DE-ED-DE-ED-DE-ED-DE">
+            <FullName>SqlServerCoverageTest</FullName>
+            <ModuleName>SqlServerCoverageTest</ModuleName>
+            <Files>
+                <File uid="581577110" fullPath="source/[dbo].[TestProcedureForCoverage].sql" />
+            </Files>
+
+            <Classes>
+                <Class>
+                    <FullName>[dbo].[TestProcedureForCoverage]</FullName>
+                    <Summary
+                        numSequencePoints="3"
+                        visitedSequencePoints="2"
+                        sequenceCoverage="66.66666666666666"
+                        numBranchPoints="0"
+                        visitedBranchPoints="0"
+                        branchCoverage="0"
+                        maxCyclomaticComplexity="0"
+                        minCyclomaticComplexity="0" />
+                    <Methods>
+                        <Method
+                            visited="true"
+                            sequenceCoverage="66.66666666666666"
+                            cyclomaticComplexity="0"
+                            branchCoverage="0"
+                            isConstructor="false"
+                            isStatic="false"
+                            isGetter="true"
+                            isSetter="false">
+                            <Name>[dbo].[TestProcedureForCoverage]</Name>
+                            <FileRef uid="581577110" />
+                            <Summary
+                                numSequencePoints="3"
+                                visitedSequencePoints="2"
+                                sequenceCoverage="66.66666666666666"
+                                numBranchPoints="0"
+                                visitedBranchPoints="0"
+                                branchCoverage="0"
+                                maxCyclomaticComplexity="0"
+                                minCyclomaticComplexity="0" />
+                            <MetadataToken>01041980</MetadataToken>
+                            <SequencePoints>
+                                <SequencePoint
+                                    vc="1"
+                                    uspid="1"
+                                    ordinal="1"
+                                    offset="71"
+                                    sl="5"
+                                    sc="4"
+                                    el="5"
+                                    ec="19" />
+                                <SequencePoint
+                                    vc="1"
+                                    uspid="2"
+                                    ordinal="2"
+                                    offset="115"
+                                    sl="7"
+                                    sc="12"
+                                    el="7"
+                                    ec="21" />
+                                <SequencePoint
+                                    vc="0"
+                                    uspid="3"
+                                    ordinal="3"
+                                    offset="176"
+                                    sl="11"
+                                    sc="12"
+                                    el="11"
+                                    ec="21" />
+                            </SequencePoints>
+                        </Method>
+                    </Methods>
+                </Class>
+            </Classes>
+        </Module>
+    </Modules>
+</CoverageSession>
