@@ -45,10 +45,10 @@ SqlServerCoverage.CommandLine.exe stop --connection-string=$conn --id=$id
 
 This is a sample summary from the console and attached is a sample HTML report
 
-![Screenshot](screenshots\htmlReport.png)
+![Screenshot](/screenshots/htmlReport.png)
 
 This is a screenshot of the terminal summary, created with [Spectre.Console](https://spectreconsole.net/)
 
-![Screenshot](screenshots\terminalSummary.png)
+![Screenshot](/screenshots/terminalSummary.png)
 
 The OpenCover xml report also exports the source objects that can then be used by [ReportGenerator](https://danielpalme.github.io/ReportGenerator/) to generate a report
