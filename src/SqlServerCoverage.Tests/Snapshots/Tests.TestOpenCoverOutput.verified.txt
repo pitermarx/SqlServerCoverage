@@ -3,8 +3,8 @@
     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <Summary
-        numSequencePoints="3"
-        visitedSequencePoints="2"
+        numSequencePoints="6"
+        visitedSequencePoints="4"
         sequenceCoverage="66.66666666666666"
         numBranchPoints="0"
         visitedBranchPoints="0"
@@ -13,10 +13,12 @@
         minCyclomaticComplexity="0" />
     <Modules>
         <Module hash="ED-DE-ED-DE-ED-DE-ED-DE-ED-DE-ED-DE-ED-DE-ED-DE-ED-DE-ED-DE">
-            <FullName>SqlServerCoverageTest</FullName>
-            <ModuleName>SqlServerCoverageTest</ModuleName>
+            <FullName>SqlServerCoverageTests</FullName>
+            <ModuleName>SqlServerCoverageTests</ModuleName>
             <Files>
-                <File uid="581577110" fullPath="source/[dbo].[TestProcedureForCoverage].sql" />
+                <File uid="597577167" fullPath="source/[dbo].[TestProcedureForCoverage].sql" />
+                <File uid="645577338" fullPath="source/[dbo].[GetTable].sql" />
+                <File uid="677577452" fullPath="source/[dbo].[TestTrigger].sql" />
             </Files>
 
             <Classes>
@@ -39,10 +41,10 @@
                             branchCoverage="0"
                             isConstructor="false"
                             isStatic="false"
-                            isGetter="true"
+                            isGetter="false"
                             isSetter="false">
                             <Name>[dbo].[TestProcedureForCoverage]</Name>
-                            <FileRef uid="581577110" />
+                            <FileRef uid="597577167" />
                             <Summary
                                 numSequencePoints="3"
                                 visitedSequencePoints="2"
@@ -58,29 +60,132 @@
                                     vc="1"
                                     uspid="1"
                                     ordinal="1"
-                                    offset="71"
+                                    offset="64"
+                                    sl="3"
+                                    sc="4"
+                                    el="3"
+                                    ec="19" />
+                                <SequencePoint
+                                    vc="0"
+                                    uspid="2"
+                                    ordinal="2"
+                                    offset="89"
+                                    sl="4"
+                                    sc="8"
+                                    el="4"
+                                    ec="17" />
+                                <SequencePoint
+                                    vc="1"
+                                    uspid="3"
+                                    ordinal="3"
+                                    offset="118"
+                                    sl="6"
+                                    sc="8"
+                                    el="6"
+                                    ec="17" />
+                            </SequencePoints>
+                        </Method>
+                    </Methods>
+                </Class>
+                <Class>
+                    <FullName>[dbo].[GetTable]</FullName>
+                    <Summary
+                        numSequencePoints="2"
+                        visitedSequencePoints="2"
+                        sequenceCoverage="100"
+                        numBranchPoints="0"
+                        visitedBranchPoints="0"
+                        branchCoverage="0"
+                        maxCyclomaticComplexity="0"
+                        minCyclomaticComplexity="0" />
+                    <Methods>
+                        <Method
+                            visited="true"
+                            sequenceCoverage="100"
+                            cyclomaticComplexity="0"
+                            branchCoverage="0"
+                            isConstructor="false"
+                            isStatic="false"
+                            isGetter="false"
+                            isSetter="false">
+                            <Name>[dbo].[GetTable]</Name>
+                            <FileRef uid="645577338" />
+                            <Summary
+                                numSequencePoints="2"
+                                visitedSequencePoints="2"
+                                sequenceCoverage="100"
+                                numBranchPoints="0"
+                                visitedBranchPoints="0"
+                                branchCoverage="0"
+                                maxCyclomaticComplexity="0"
+                                minCyclomaticComplexity="0" />
+                            <MetadataToken>01041980</MetadataToken>
+                            <SequencePoints>
+                                <SequencePoint
+                                    vc="1"
+                                    uspid="4"
+                                    ordinal="1"
+                                    offset="97"
                                     sl="5"
                                     sc="4"
                                     el="5"
-                                    ec="19" />
+                                    ec="45" />
                                 <SequencePoint
                                     vc="1"
-                                    uspid="2"
+                                    uspid="5"
                                     ordinal="2"
-                                    offset="115"
-                                    sl="7"
-                                    sc="12"
-                                    el="7"
-                                    ec="21" />
+                                    offset="144"
+                                    sl="6"
+                                    sc="4"
+                                    el="6"
+                                    ec="10" />
+                            </SequencePoints>
+                        </Method>
+                    </Methods>
+                </Class>
+                <Class>
+                    <FullName>[dbo].[TestTrigger]</FullName>
+                    <Summary
+                        numSequencePoints="1"
+                        visitedSequencePoints="0"
+                        sequenceCoverage="0"
+                        numBranchPoints="0"
+                        visitedBranchPoints="0"
+                        branchCoverage="0"
+                        maxCyclomaticComplexity="0"
+                        minCyclomaticComplexity="0" />
+                    <Methods>
+                        <Method
+                            visited="false"
+                            sequenceCoverage="0"
+                            cyclomaticComplexity="0"
+                            branchCoverage="0"
+                            isConstructor="false"
+                            isStatic="false"
+                            isGetter="false"
+                            isSetter="false">
+                            <Name>[dbo].[TestTrigger]</Name>
+                            <FileRef uid="677577452" />
+                            <Summary
+                                numSequencePoints="1"
+                                visitedSequencePoints="0"
+                                sequenceCoverage="0"
+                                numBranchPoints="0"
+                                visitedBranchPoints="0"
+                                branchCoverage="0"
+                                maxCyclomaticComplexity="0"
+                                minCyclomaticComplexity="0" />
+                            <MetadataToken>01041980</MetadataToken>
+                            <SequencePoints>
                                 <SequencePoint
                                     vc="0"
-                                    uspid="3"
-                                    ordinal="3"
-                                    offset="176"
-                                    sl="11"
-                                    sc="12"
-                                    el="11"
-                                    ec="21" />
+                                    uspid="6"
+                                    ordinal="1"
+                                    offset="64"
+                                    sl="5"
+                                    sc="4"
+                                    el="7"
+                                    ec="36" />
                             </SequencePoints>
                         </Method>
                     </Methods>

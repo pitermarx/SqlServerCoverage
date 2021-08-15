@@ -1,8 +1,8 @@
-﻿
-<html>
+﻿<html>
     <head>
-        <title>SqlServerCoverage Code Coverage Results</title>
+        <title>Code Coverage Results - SqlServerCoverageTests</title>
         <style>
+            /*! stylize.css v1.0.0 | License MIT | https://github.com/vasanthv/stylize.css */
             :root{
                 --text: #333333;
                 --text-med: #888888;
@@ -11,8 +11,8 @@
                 --blue: #3498db;
                 --dark-blue: #2980b9;
                 --yellow: #ffeaa7;
-                --red: #e45748;
-                --green: #38cc51;
+                --red: #ff8577;
+                --green: #00ea28;
                 --border-radius: 3px;
             }
             body{
@@ -22,6 +22,18 @@
                 color: var(--text);
                 margin: 10px 50px;
                 -webkit-text-size-adjust: 100 %;
+            }
+            h1{
+                font-size: 2em; /* h1 inside section is treated different in some browsers */
+                margin: 0.67em 0;
+            }
+            h2{
+                font-size: 1.5em;
+                margin: 0.83em 0;
+            }
+            h3{
+                font-size: 1.17em;
+                margin: 1em 0;
             }
             a{
                 color:var(--blue);
@@ -64,49 +76,114 @@
                 text-align: left;
                 vertical-align: middle;
             }
+
+            /* Custom */
+            pre b { color: blue }
             .right{
                 float: right;
-            }
-        </style>
+            }</style>
     </head>
     <body id="top">
+        <h1> Coverage Report </h1>
+        <p>
+            <b>Database: </b> SqlServerCoverageTests<br>
+            <b>Object Coverage: </b> 66.67% <br />
+            <b>Statement Coverage: </b> 66.67%
+        </p>
+        <p> <mark>Attention!</mark> <br>
+            This tool only collects coverage for Stored Procedures, Triggers and table valued functions. <br>
+            View and Inline/Scalar function executions are not tracked
+        </p>
+        <h2> Object breakdown </h2>
         <table>
             <thead>
-                <td>Object Name</td>
-                <td>Statement Count</td>
-                <td>Covered Statement Count</td>
+                <td>Type</td>
+                <td>Covered objects</td>
+                <td>Uncovered objects</td>
                 <td>Coverage %</td>
             </thead>
             <tr>
-                <td><b>Total</b></td>
-                <td>3</td>
-                <td>2</td>
-                <td>66.67</td>
+                <td>Procedure</td>
+                <td>1</td>
+                <td>0</td>
+                <td>100.00</td>
             </tr>
             <tr>
+                <td>TableFunction</td>
+                <td>1</td>
+                <td>0</td>
+                <td>100.00</td>
+            </tr>
+            <tr>
+                <td>Trigger</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0.00</td>
+            </tr>
+        </table>
+        <h2> Statement breakdown</h2>
+        <table>
+            <thead>
+                <td>Type</td>
+                <td>Object Name</td>
+                <td># Statements</td>
+                <td># Covered Statements</td>
+                <td>Coverage %</td>
+            </thead>
+            <tr>
+                <td>TableFunction</td>
+                <td><a href="#[dbo].[GetTable]">[dbo].[GetTable]</a></td>
+                <td>2</td>
+                <td>2</td>
+                <td>100.00</td>
+            </tr>
+            <tr>
+                <td>Procedure</td>
                 <td><a href="#[dbo].[TestProcedureForCoverage]">[dbo].[TestProcedureForCoverage]</a></td>
                 <td>3</td>
                 <td>2</td>
                 <td>66.67</td>
             </tr>
+            <tr>
+                <td>Trigger</td>
+                <td><a href="#[dbo].[TestTrigger]">[dbo].[TestTrigger]</a></td>
+                <td>1</td>
+                <td>0</td>
+                <td>0.00</td>
+            </tr>
         </table>
         <hr />
         <details>
             <summary><a name="[dbo].[TestProcedureForCoverage]">[dbo].[TestProcedureForCoverage]</a> <a href="#top" class=right>Scroll Top</a></summary>
-            <pre>CREATE PROC TestProcedureForCoverage
-    (@value int)
-AS
-BEGIN
-    <mark class=green>IF (@value = 1)</mark>
-        BEGIN
-            <mark class=green>SELECT 10</mark>
-        END
-    ELSE
-        BEGIN
-            <mark class=red>SELECT 20</mark>
-        END
-END
-                </pre>
+            <pre><b>CREATE</b> PROC TestProcedureForCoverage(@value int)
+<b>AS</b> <b>BEGIN</b>
+    <mark class=green><b>IF</b> (@value = 1)</mark>
+        <mark class=red><b>SELECT</b> 10</mark>
+    <b>ELSE</b>
+        <mark class=green><b>SELECT</b> 20</mark>
+<b>END</b></pre>
+            </details>
+        <hr />
+        <details>
+            <summary><a name="[dbo].[GetTable]">[dbo].[GetTable]</a> <a href="#top" class=right>Scroll Top</a></summary>
+            <pre><b>CREATE</b> FUNCTION GetTable()
+<b>RETURNS</b> @tempTable <b>TABLE</b> (id int, name NVARCHAR(10))
+<b>AS</b>
+<b>BEGIN</b>
+    <mark class=green><b>INSERT</b> @tempTable <b>SELECT</b> * <b>FROM</b> TestTable</mark>
+    <mark class=green><b>RETURN</b></mark>
+<b>END</b></pre>
+            </details>
+        <hr />
+        <details>
+            <summary><a name="[dbo].[TestTrigger]">[dbo].[TestTrigger]</a> <a href="#top" class=right>Scroll Top</a></summary>
+            <pre><b>CREATE</b> TRIGGER TestTrigger
+<b>ON</b> TestTable
+AFTER <b>INSERT</b>
+<b>AS</b>
+    <mark class=red><b>UPDATE</b> TestTable
+    <b>SET</b> name = CONCAT(name, 'Triggered')
+    <b>WHERE</b> name <b>NOT</b> <b>LIKE</b> '%Triggered'</mark></pre>
             </details>
     </body>
 </html>

@@ -1,7 +1,12 @@
 # SqlServerCoverage
 A library and tool to collect SQL coverage data
 
+HEAVILY INSPIRED BY https://github.com/GoEddie/SQLCover
+
 This tool allows us to know how much of the stored procedures are covered by some action
+
+It uses [XEvents](https://docs.microsoft.com/en-us/sql/relational-databases/extended-events/extended-events) on sql server to track which statements were used in the time a trace session was open.
+Unfortunately Views, Scalar functions and inlined table functions are not trackable via this mecanism. Only Stored procedures, Triggers and Table Valued functions are tracked.
 
 ```cs
 // Create the initial object to interface into the API
@@ -30,17 +35,19 @@ There are 3 projects, the unit tests, the lib itself and a command line interfac
 
 ```powershell
 $conn = "Data Source=(local);Integrated Security=True"
+$db = "DatabaseName"
+
 #start a session and get the ID
-$id = SqlServerCoverage.CommandLine.exe start --connection-string=$conn --database="DatabaseName"
+$id = dotnet sql-coverage start --connection-string=$conn --database=$db
 if ($LASTEXITCODE -ne 0) { throw $id }
 
 #collect coverage data
-SqlServerCoverage.CommandLine.exe collect `
-  --connection-string=$conn --database="Database" --id=$id `
-  --html --opencover --summary --output=testresults
+dotnet sql-coverage collect `
+  --connection-string=$conn --database=$db --id=$id `
+  --html --opencover --sonar --summary --output=testresults
 
 #cleanup
-SqlServerCoverage.CommandLine.exe stop --connection-string=$conn --id=$id
+dotnet sql-coverage stop --connection-string=$conn --id=$id
 ```
 
 This is a sample summary from the console and attached is a sample HTML report
@@ -52,3 +59,14 @@ This is a screenshot of the terminal summary, created with [Spectre.Console](htt
 ![Screenshot](/screenshots/terminalSummary.png)
 
 The OpenCover xml report also exports the source objects that can then be used by [ReportGenerator](https://danielpalme.github.io/ReportGenerator/) to generate a report
+
+It can also export on the [sonar generic coverage](https://docs.sonarqube.org/latest/analysis/generic-test/) format
+
+# Build and test
+On the root directory just run `.\scripts\build.ps1` to build and `.\scripts\test.ps1` to test
+
+It assumes .net 5.0 and an SQL server instance available at localhost with integrated security
+
+the build script will pack and install a local dotnet tool
+
+the test script will run the unit tests and also test the commandline interface

@@ -93,15 +93,28 @@ namespace SqlServerCoverage.Tests
         }
 
         [Fact]
+        public Task TestSonarOutput()
+        {
+            string xml = null;
+
+            WithTestData(session =>
+            {
+                var result = session.ReadCoverage();
+                xml = result.GetSonarGenericXml();
+            });
+
+            return Verifier.Verify(xml, VerifySettings());
+        }
+
+        [Fact]
         public Task TestHtmlOutput()
         {
             string html = null;
 
-            WithTraceAndSproc(session =>
+            WithTestData(session =>
             {
-                Execute("EXEC TestProcedureForCoverage 1", c => c.ExecuteScalar());
                 var result = session.ReadCoverage();
-                html = result.Html();
+                html = result.GetHtml();
             });
 
             return Verifier.Verify(html, VerifySettings());
@@ -112,11 +125,10 @@ namespace SqlServerCoverage.Tests
         {
             string xml = null;
 
-            WithTraceAndSproc(session =>
+            WithTestData(session =>
             {
-                Execute("EXEC TestProcedureForCoverage 1", c => c.ExecuteScalar());
                 var result = session.ReadCoverage();
-                xml = result.OpenCoverXml();
+                xml = result.GetOpenCoverXml();
             });
 
             return Verifier.Verify(xml, VerifySettings());

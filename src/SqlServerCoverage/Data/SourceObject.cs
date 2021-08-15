@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace SqlServerCoverage.Data
 {
     public class SourceObject
     {
+        public static readonly SourceObject Empty = new SourceObject(Array.Empty<Statement>(), string.Empty, string.Empty, -1, "UNKNOWN");
+
         public string Text { get; }
         public string Name { get; }
         public SourceObjectType Type { get; }
@@ -15,8 +18,14 @@ namespace SqlServerCoverage.Data
 
         public IReadOnlyList<Statement> Statements { get; }
 
+        // Views, Inline functions and scalar functions are not detected by the (ADD EVENT sqlserver.sp_statement_starting)
+        public bool IsCoverable =>
+            Type == SourceObjectType.TableFunction ||
+            Type == SourceObjectType.Procedure ||
+            Type == SourceObjectType.Trigger;
+
         internal SourceObject(
-            List<Statement> statements,
+            IReadOnlyList<Statement> statements,
             string text,
             string objectName,
             int objectId,
@@ -40,11 +49,11 @@ namespace SqlServerCoverage.Data
             _ => SourceObjectType.Unknown
         };
 
-        internal void UpdateCoverage(CoverageFragment coverage)
+        internal void UpdateCoverage(CoverageFragment fragment)
         {
             foreach (var statement in Statements)
             {
-                if (coverage.Includes(statement))
+                if (fragment.Covers(statement))
                 {
                     IsCovered = true;
                     if (statement.HitCount == 0)

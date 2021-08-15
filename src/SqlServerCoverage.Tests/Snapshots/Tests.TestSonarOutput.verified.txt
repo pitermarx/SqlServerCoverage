@@ -1,0 +1,15 @@
+﻿
+<coverage version="1">
+    <file path="source/[dbo].[TestProcedureForCoverage].sql" >
+        <lineToCover lineNumber="3" covered="True" />
+        <lineToCover lineNumber="4" covered="False" />
+        <lineToCover lineNumber="6" covered="True" />
+    </file>
+    <file path="source/[dbo].[GetTable].sql" >
+        <lineToCover lineNumber="5" covered="True" />
+        <lineToCover lineNumber="6" covered="True" />
+    </file>
+    <file path="source/[dbo].[TestTrigger].sql" >
+        <lineToCover lineNumber="5" covered="False" />
+    </file>
+</coverage>

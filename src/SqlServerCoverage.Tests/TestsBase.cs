@@ -1,8 +1,8 @@
 ﻿using SqlServerCoverage.Interfaces;
 using System;
 using System.Data.SqlClient;
+using System.IO;
 using VerifyTests;
-using VerifyXunit;
 
 namespace SqlServerCoverage.Tests
 {
@@ -23,7 +23,7 @@ BEGIN
         END
 END";
         public const string ConnectionString = "Data Source=(local);Integrated Security=True";
-        public const string DatabaseName = "SqlServerCoverageTest";
+        public const string DatabaseName = "SqlServerCoverageTests";
 
         protected TestsBase() { }
 
@@ -35,6 +35,29 @@ END";
         }
 
         public static ICoverageSessionController NewCoverageController() => CodeCoverage.NewController(ConnectionString, DatabaseName);
+
+        public static void WithTestData(Action<ICoverageSession> action)
+        {
+            WithDatabase(() =>
+            {
+                var session = NewCoverageController().NewSession();
+
+                using var stream = typeof(TestsBase).Assembly.GetManifestResourceStream("SqlServerCoverage.Tests.test_data.sql");
+                using var reader = new StreamReader(stream);
+
+                foreach (var statement in reader.ReadToEnd().Split("GO"))
+                    Execute(statement.Trim(), cmd => cmd.ExecuteNonQuery());
+
+                try
+                {
+                    action(session);
+                }
+                finally
+                {
+                    session.StopSession();
+                }
+            });
+        }
 
         public static void WithTraceAndSproc(Action<ICoverageSession> action)
         {

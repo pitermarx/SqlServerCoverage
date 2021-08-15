@@ -19,7 +19,7 @@ namespace SqlServerCoverage.Database
 
         private string fileName;
 
-        public TraceManager(string connectionString, string traceName = null)
+        public TraceManager(string connectionString, string traceName)
         {
             Name =
                 traceName == null ? $"{TracePrefix}{Guid.NewGuid():N}" :
@@ -142,10 +142,12 @@ namespace SqlServerCoverage.Database
                         XmlDocument doc = new XmlDocument();
                         doc.LoadXml(reader.GetString(0));
 
+                        // not sure why I need to /2 and +2
+                        // but it works...
                         return new CoverageFragment(
                             ReadInt(doc, "object_id"),
-                            ReadInt(doc, "offset"),
-                            ReadInt(doc, "offset_end"));
+                            (ReadInt(doc, "offset") / 2),
+                            (ReadInt(doc, "offset_end") / 2) + 2);
                     });
 
             return records;
@@ -166,24 +168,19 @@ namespace SqlServerCoverage.Database
                 RunScript($"DROP EVENT SESSION [{Name}] ON SERVER");
             }
 
-            try
-            {
-                var name = GetFileName();
+            var name = GetFileName();
 
-                // In the event that SQL server is on the same machine as this
-                // try to delete the files
-                // but ignore failures
-
-                var info = new FileInfo(name);
-                var dir = new DirectoryInfo(info.DirectoryName);
-                var wildcard = info.Name + "*.*";
-                foreach (var file in dir.EnumerateFiles(wildcard))
-                    File.Delete(file.FullName);
-            }
-            catch
-            {
-                // Swallow
-            }
+            RunScript("EXEC sp_configure N'show advanced options', 1");
+            RunScript("RECONFIGURE; EXEC sp_configure N'xp_cmdshell', 1");
+            RunScript($@"
+                RECONFIGURE
+                DECLARE @cmd VARCHAR(1000)
+                SET @cmd = 'del /q ""{name}*.xel""'
+                EXEC xp_cmdshell @cmd");
+            RunScript(@"
+                EXEC sp_configure N'xp_cmdshell', 0
+                EXEC sp_configure N'show advanced options', 0");
+            RunScript("RECONFIGURE");
         }
     }
 }

@@ -1,8 +1,7 @@
-﻿using Spectre.Cli;
+﻿using Spectre.Console.Cli;
 using Spectre.Console;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
-using ValidationResult = Spectre.Cli.ValidationResult;
 
 namespace SqlServerCoverage.CommandLine
 {

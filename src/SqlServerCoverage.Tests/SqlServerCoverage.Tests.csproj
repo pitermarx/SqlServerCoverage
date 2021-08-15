@@ -26,5 +26,6 @@
 
   <ItemGroup>
     <None Include="*.verified.txt" />
+    <EmbeddedResource Include="test_data.sql" />
   </ItemGroup>
 </Project>

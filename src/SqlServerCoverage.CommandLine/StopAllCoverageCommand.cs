@@ -5,7 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace SqlServerCoverage.CommandLine
 {
-    internal sealed class ListSessionsCommand : Command<ListSessionsCommand.Settings>
+    internal sealed class StopAllCoverageCommand : Command<StopAllCoverageCommand.Settings>
     {
         public sealed class Settings : CommandSettings
         {
@@ -15,19 +15,26 @@ namespace SqlServerCoverage.CommandLine
 
             public override ValidationResult Validate()
             {
-                return string.IsNullOrEmpty(ConnectionString)
-                    ? ValidationResult.Error("ConnectionString is mandatory")
-                    : ValidationResult.Success();
+                if (string.IsNullOrEmpty(ConnectionString))
+                {
+                    return ValidationResult.Error("--connection-string is mandatory");
+                }
+
+                return ValidationResult.Success();
             }
         }
 
         public override int Execute([NotNull] CommandContext context, [NotNull] Settings settings)
         {
             var controller = CodeCoverage.NewController(settings.ConnectionString, "master");
-            var sessions = controller.ListSessions();
-            if (sessions.Count == 0) AnsiConsole.Write("No sessions found");
-            foreach (var session in sessions)
-                AnsiConsole.WriteLine(session);
+            foreach (var id in controller.ListSessions())
+            {
+                CodeCoverage
+                    .NewController(settings.ConnectionString, "master", id)
+                    .AttachSession()
+                    .StopSession();
+                AnsiConsole.MarkupLine($"Session {id} stopped");
+            }
             return 0;
         }
     }

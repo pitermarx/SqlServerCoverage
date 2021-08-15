@@ -2,6 +2,7 @@
 using SqlServerCoverage.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SqlServerCoverage
 {
@@ -23,7 +24,7 @@ namespace SqlServerCoverage
         public static ICoverageSessionController NewController(string connectionString, string databaseName, string traceName = null)
             => new CodeCoverage(connectionString, databaseName, traceName);
 
-        private CodeCoverage(string connectionString, string databaseName, string traceName = null)
+        private CodeCoverage(string connectionString, string databaseName, string traceName)
         {
             this.connectionString = connectionString;
             this.databaseName = databaseName;
@@ -48,9 +49,11 @@ namespace SqlServerCoverage
 
         public CoverageResult ReadCoverage(bool waitLatency = true)
         {
-            var connection = new Connection(connectionString, databaseName);
-            var sourceItems = new SourceReader(connection).GetSourceItems();
             var coveredStatements = Trace.CollectCoverage(waitLatency);
+            var sourceItems = new SourceReader(connectionString, databaseName)
+                .GetSourceItems()
+                .Where(o => o.IsCoverable)
+                .ToDictionary(o => o.ObjectId);
 
             foreach (var statement in coveredStatements)
             {
@@ -60,7 +63,7 @@ namespace SqlServerCoverage
                 }
             }
 
-            return new CoverageResult(sourceItems, databaseName);
+            return new CoverageResult(sourceItems.Values, databaseName);
         }
 
         public void StopSession() => Trace.Drop();

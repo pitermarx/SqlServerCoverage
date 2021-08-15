@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Microsoft.SqlServer.TransactSql.ScriptDom;
 using SqlServerCoverage.Data;
 
-namespace SqlServerCoverage.Parsers
+namespace SqlServerCoverage.TSql
 {
     internal class StatementVisitor : TSqlFragmentVisitor
     {
@@ -13,33 +13,21 @@ namespace SqlServerCoverage.Parsers
 
         public override void Visit(TSqlStatement node)
         {
-            if (!ShouldEnumerateChildren(node))
-            {
-                return;
-            }
-
             base.Visit(node);
 
-            if (IsIgnoredType(node))
+            if (!IgnoreStatement(node))
             {
-                return;
+                var offset = node.StartOffset;
+                var length = GetLength(node);
+                var statementText = script.Substring(offset, length);
+                Statements.Add(new Statement(statementText, offset));
             }
-
-            var offset = node.StartOffset;
-            var length = GetLength(node);
-            var statementText = script.Substring(offset, length);
-            Statements.Add(new Statement(statementText, offset));
         }
 
-        private bool ShouldEnumerateChildren(TSqlStatement statement) => statement switch
-        {
-            CreateViewStatement _ => false,
-            _ => true
-        };
-
-        private bool IsIgnoredType(TSqlStatement statement) => statement switch
+        private bool IgnoreStatement(TSqlStatement statement) => statement switch
         {
             DeclareTableVariableStatement _ => true,
+            DeclareVariableStatement      _ => true,
             CreateProcedureStatement _      => true,
             CreateFunctionStatement _       => true,
             CreateTriggerStatement _        => true,

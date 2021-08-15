@@ -11,6 +11,12 @@ namespace SqlServerCoverage.Database
             return reader.GetInt32(name);
         }
 
+        public static bool? TryGetBoolean(this SqlDataReader reader, string name)
+        {
+            if (reader.IsDBNull(name)) return null;
+            return reader.GetBoolean(name);
+        }
+
         public static string TryGetString(this SqlDataReader reader, string name)
         {
             if (reader.IsDBNull(name)) return null;
