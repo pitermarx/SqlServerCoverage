@@ -3,6 +3,8 @@ A library and tool to collect SQL coverage data
 
 HEAVILY INSPIRED BY https://github.com/GoEddie/SQLCover
 
+Quoting GoEddie: `What you have looks great, I love the simplicity of OSS and the way it is licensed means you can do what you want :)`
+
 This tool allows us to know how much of the stored procedures are covered by some action
 
 It uses [XEvents](https://docs.microsoft.com/en-us/sql/relational-databases/extended-events/extended-events) on sql server to track which statements were used in the time a trace session was open.
