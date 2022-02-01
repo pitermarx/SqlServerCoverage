@@ -150,9 +150,9 @@ namespace SqlServerCoverage.CommandLine
 
         private static void RenderSummary(CoverageResult results)
         {
-            AnsiConsole.Render(new Rule("Coverage Summary").Alignment(Justify.Left));
+            AnsiConsole.Write(new Rule("Coverage Summary").Alignment(Justify.Left));
 
-            AnsiConsole.Render(new BarChart
+            AnsiConsole.Write(new BarChart
                 {
                     Label = $"{results.CoveragePercent:0.00}% Coverage"
                 }

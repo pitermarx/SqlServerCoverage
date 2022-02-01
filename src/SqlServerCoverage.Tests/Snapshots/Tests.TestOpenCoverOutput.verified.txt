@@ -54,7 +54,6 @@
                                 branchCoverage="0"
                                 maxCyclomaticComplexity="0"
                                 minCyclomaticComplexity="0" />
-                            <MetadataToken>01041980</MetadataToken>
                             <SequencePoints>
                                 <SequencePoint
                                     vc="1"
@@ -119,7 +118,6 @@
                                 branchCoverage="0"
                                 maxCyclomaticComplexity="0"
                                 minCyclomaticComplexity="0" />
-                            <MetadataToken>01041980</MetadataToken>
                             <SequencePoints>
                                 <SequencePoint
                                     vc="1"
@@ -175,7 +173,6 @@
                                 branchCoverage="0"
                                 maxCyclomaticComplexity="0"
                                 minCyclomaticComplexity="0" />
-                            <MetadataToken>01041980</MetadataToken>
                             <SequencePoints>
                                 <SequencePoint
                                     vc="0"

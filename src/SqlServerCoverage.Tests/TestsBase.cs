@@ -1,6 +1,6 @@
-﻿using SqlServerCoverage.Interfaces;
+﻿using Microsoft.Data.SqlClient;
+using SqlServerCoverage.Interfaces;
 using System;
-using System.Data.SqlClient;
 using System.IO;
 using VerifyTests;
 
@@ -22,7 +22,7 @@ BEGIN
             SELECT 20
         END
 END";
-        public const string ConnectionString = "Data Source=(local);Integrated Security=True";
+        public const string ConnectionString = "Data Source=(local);Integrated Security=True;TrustServerCertificate=True";
         public const string DatabaseName = "SqlServerCoverageTests";
 
         protected TestsBase() { }

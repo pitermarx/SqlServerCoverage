@@ -5,7 +5,7 @@ Write-Information "Running Unit tests"
 $env:DiffEngine_Disabled="true"
 dotnet test ./src/SqlServerCoverage.Tests/
 
-$connection = "Data Source=(local);Integrated Security=True"
+$connection = "Data Source=(local);Integrated Security=True;TrustServerCertificate=True"
 $dbName = "SqlServerCoverageTests"
 $output = "./out/tests"
 

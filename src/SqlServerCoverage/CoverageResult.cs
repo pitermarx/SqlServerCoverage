@@ -295,7 +295,6 @@ namespace SqlServerCoverage
                                 branchCoverage=""0""
                                 maxCyclomaticComplexity=""0""
                                 minCyclomaticComplexity=""0"" />
-                            <MetadataToken>01132860</MetadataToken>
                             <SequencePoints>",
                         sourceObj.Name,
                         sourceObj.StatementCount,
