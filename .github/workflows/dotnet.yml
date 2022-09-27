@@ -38,7 +38,9 @@ jobs:
     - name: Nuget Push
       shell: pwsh
       env:
-        NUGET_API_KEY: ${{ secrets.nuget_api_key }}
+        NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+        GH_ACCESS_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
       run: |
         cd out/tool
+        dotnet nuget "*.nupkg" --source https://nuget.pkg.github.com/OWNER/index.json --skip-duplicate --api-key $env:GH_ACCESS_TOKEN
         dotnet nuget "*.nupkg" --source https://api.nuget.org/v3/index.json --skip-duplicate --api-key $env:NUGET_API_KEY
