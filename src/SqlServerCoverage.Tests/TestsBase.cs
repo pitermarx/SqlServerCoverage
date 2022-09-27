@@ -23,8 +23,8 @@ BEGIN
         END
 END";
         public static string ConnectionString 
-            => Environment.GetEnvironmentVariable("ConnectionStringForTests")
-                ?? "Data Source=(local);Integrated Security=True;TrustServerCertificate=True";
+            => (Environment.GetEnvironmentVariable("ConnectionStringForTests")
+                ?? "Data Source=(local);Integrated Security=True") + ";TrustServerCertificate=True";
         public const string DatabaseName = "SqlServerCoverageTests";
 
         protected TestsBase() { }
