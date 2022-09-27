@@ -22,7 +22,7 @@ BEGIN
             SELECT 20
         END
 END";
-        public string ConnectionString 
+        public static string ConnectionString 
             => Environment.GetEnvironmentVariable("ConnectionStringForTests")
                 ?? "Data Source=(local);Integrated Security=True;TrustServerCertificate=True";
         public const string DatabaseName = "SqlServerCoverageTests";
