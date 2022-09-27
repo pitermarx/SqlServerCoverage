@@ -30,7 +30,37 @@ $sessions = dotnet sql-coverage list --connection-string=$connection
 if (!$sessions.Contains($id1)) { throw "Sessions does not contain ID1" }
 if (!$sessions.Contains($id2)) { throw "Sessions does not contain ID2" }
 
-Write-Host "Stopping all sessions"
+Write-Host "Ensuring another database"
+Invoke-Sqlcmd -ServerInstance ".\SQLEXPRESS" -Query "if (select DB_ID('$dbName-2')) is not null
+    begin
+        alter database [$dbName-2] set offline with rollback immediate;
+        alter database [$dbName-2] set online;
+        drop database [$dbName-2];
+    end";
+
+Invoke-Sqlcmd -ServerInstance ".\SQLEXPRESS" -Query "CREATE DATABASE [$dbName-2]";
+
+Write-Host "Starting sessions"
+$id3 = dotnet sql-coverage start --connection-string=$connection --database="$dbName-2"
+$sessions = dotnet sql-coverage list --connection-string=$connection
+if (!$sessions.Contains($id3)) { throw "Sessions does not contain ID3" }
+
+Write-Host "dropping database"
+Invoke-Sqlcmd -ServerInstance ".\SQLEXPRESS" -Query "if (select DB_ID('$dbName-2')) is not null
+    begin
+        alter database [$dbName-2] set offline with rollback immediate;
+        alter database [$dbName-2] set online;
+        drop database [$dbName-2];
+    end";
+
+Write-Host "Stopping all sessions for the missing dbs"
+dotnet sql-coverage stop-all --connection-string=$connection --only-missing-dbs
+$sessions = dotnet sql-coverage list --connection-string=$connection
+if (!$sessions.Contains($id1)) { throw "Sessions does not contain ID1" }
+if (!$sessions.Contains($id2)) { throw "Sessions does not contain ID2" }
+if ($sessions.Contains($id3)) { throw "Sessions contains ID3" }
+
+Write-Host "Stopping all sessions for the missing dbs"
 dotnet sql-coverage stop-all --connection-string=$connection
 $sessions = dotnet sql-coverage list --connection-string=$connection
 if ($sessions -ne "No sessions found") { throw "Sessions should have been stopped but were $sessions"}

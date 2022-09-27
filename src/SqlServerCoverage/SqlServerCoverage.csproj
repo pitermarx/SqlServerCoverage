@@ -3,12 +3,12 @@
   <PropertyGroup>
     <TargetFrameworks>net5.0;netstandard2.1</TargetFrameworks>
     <RollForward>LatestMajor</RollForward>
-    
+
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Data.SqlClient" Version="4.1.0" />
-    <PackageReference Include="Microsoft.SqlServer.DACFx" Version="160.5400.1" />
+    <PackageReference Include="Microsoft.SqlServer.DACFx" Version="160.6161.0" />
   </ItemGroup>
 
 </Project>

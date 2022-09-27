@@ -35,9 +35,8 @@ namespace SqlServerCoverage.CommandLine
 
         public override int Execute([NotNull] CommandContext context, [NotNull] Settings settings)
         {
-            var controller = CodeCoverage.NewController(settings.ConnectionString, "master", settings.Id);
-            var session = controller.AttachSession();
-            session.StopSession();
+            var session = new CoverageSessionController(settings.ConnectionString).AttachSession(settings.Id);
+            session.Stop();
             AnsiConsole.MarkupLine($"Session {settings.Id} stopped");
             return 0;
         }

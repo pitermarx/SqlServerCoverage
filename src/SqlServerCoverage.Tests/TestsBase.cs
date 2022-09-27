@@ -1,5 +1,4 @@
 ﻿using Microsoft.Data.SqlClient;
-using SqlServerCoverage.Interfaces;
 using System;
 using System.IO;
 using VerifyTests;
@@ -9,7 +8,7 @@ namespace SqlServerCoverage.Tests
     public class TestsBase
     {
         protected const string SprocText =
-@"CREATE PROC TestProcedureForCoverage
+            @"CREATE PROC TestProcedureForCoverage
     (@value int)
 AS
 BEGIN
@@ -22,7 +21,7 @@ BEGIN
             SELECT 20
         END
 END";
-        public static string ConnectionString 
+        public static string ConnectionString
             => (Environment.GetEnvironmentVariable("ConnectionStringForTests")
                 ?? "Data Source=(local);Integrated Security=True") + ";TrustServerCertificate=True";
         public const string DatabaseName = "SqlServerCoverageTests";
@@ -36,15 +35,18 @@ END";
             return settings;
         }
 
-        public static ICoverageSessionController NewCoverageController() => CodeCoverage.NewController(ConnectionString, DatabaseName);
+        public static CoverageSessionController NewCoverageController() =>
+            new CoverageSessionController(ConnectionString);
 
-        public static void WithTestData(Action<ICoverageSession> action)
+        public static void WithTestData(Action<CoverageSession> action)
         {
             WithDatabase(() =>
             {
-                var session = NewCoverageController().NewSession();
+                var session = NewCoverageController().NewSession(DatabaseName);
 
-                using var stream = typeof(TestsBase).Assembly.GetManifestResourceStream("SqlServerCoverage.Tests.test_data.sql");
+                using var stream = typeof(TestsBase).Assembly.GetManifestResourceStream(
+                    "SqlServerCoverage.Tests.test_data.sql"
+                );
                 using var reader = new StreamReader(stream);
 
                 foreach (var statement in reader.ReadToEnd().Split("GO"))
@@ -56,18 +58,18 @@ END";
                 }
                 finally
                 {
-                    session.StopSession();
+                    session.Stop();
                 }
             });
         }
 
-        public static void WithTraceAndSproc(Action<ICoverageSession> action)
+        public static void WithTraceAndSproc(Action<CoverageSession> action)
         {
             WithDatabase(() =>
             {
                 Execute(SprocText, cmd => cmd.ExecuteNonQuery());
 
-                var session = NewCoverageController().NewSession();
+                var session = NewCoverageController().NewSession(DatabaseName);
 
                 try
                 {
@@ -75,16 +77,16 @@ END";
                 }
                 finally
                 {
-                    session.StopSession();
+                    session.Stop();
                 }
             });
         }
 
-        public static void WithNewSession(Action<ICoverageSession> action)
+        public static void WithNewSession(Action<CoverageSession> action)
         {
             WithDatabase(() =>
             {
-                var session = NewCoverageController().NewSession();
+                var session = NewCoverageController().NewSession(DatabaseName);
 
                 try
                 {
@@ -92,7 +94,7 @@ END";
                 }
                 finally
                 {
-                    session.StopSession();
+                    session.Stop();
                 }
             });
         }
@@ -125,7 +127,8 @@ END";
             using var conn = new SqlConnection(ConnectionString);
             conn.Open();
 
-            if (changeDb) conn.ChangeDatabase(DatabaseName);
+            if (changeDb)
+                conn.ChangeDatabase(DatabaseName);
 
             using var cmd = conn.CreateCommand();
             cmd.CommandText = text;

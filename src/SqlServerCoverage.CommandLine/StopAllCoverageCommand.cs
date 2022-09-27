@@ -13,6 +13,10 @@ namespace SqlServerCoverage.CommandLine
             [CommandOption("--connection-string")]
             public string ConnectionString { get; init; }
 
+            [Description("Only stop sessions of missing dbs.")]
+            [CommandOption("--only-missing-dbs")]
+            public bool OnlyMissingDbs { get; init; }
+
             public override ValidationResult Validate()
             {
                 if (string.IsNullOrEmpty(ConnectionString))
@@ -26,13 +30,14 @@ namespace SqlServerCoverage.CommandLine
 
         public override int Execute([NotNull] CommandContext context, [NotNull] Settings settings)
         {
-            var controller = CodeCoverage.NewController(settings.ConnectionString, "master");
-            foreach (var id in controller.ListSessions())
+            var controller = new CoverageSessionController(settings.ConnectionString);
+            foreach (var (id, db) in controller.ListSessions())
             {
-                CodeCoverage
-                    .NewController(settings.ConnectionString, "master", id)
-                    .AttachSession()
-                    .StopSession();
+                if (db is not null && settings.OnlyMissingDbs)
+                    continue;
+
+                var session = new CoverageSessionController(settings.ConnectionString).AttachSession(id);
+                session.Stop();
                 AnsiConsole.MarkupLine($"Session {id} stopped");
             }
             return 0;

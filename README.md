@@ -12,12 +12,10 @@ Unfortunately Views, Scalar functions and inlined table functions are not tracka
 
 ```cs
 // Create the initial object to interface into the API
-var coverageController = CodeCoverage.NewController(
-  "Data Source=(local);Integrated Security=True",
-  "DatabaseName");
+var coverageController = new CoverageSessionController("Data Source=.\SQLEXPRESS;Integrated Security=True");
 
 // Create a new session to collect coverage
-var session = coverageController.StartSession();
+var session = coverageController.StartSession("DatabaseName");
 
 // Do stufff in the database
 ...
@@ -36,7 +34,7 @@ session.StopSession();
 There are 3 projects, the unit tests, the lib itself and a command line interface. We can use it like this
 
 ```powershell
-$conn = "Data Source=(local);Integrated Security=True"
+$conn = "Data Source=.\SQLEXPRESS;Integrated Security=True"
 $db = "DatabaseName"
 
 #start a session and get the ID
@@ -44,8 +42,7 @@ $id = dotnet sql-coverage start --connection-string=$conn --database=$db
 if ($LASTEXITCODE -ne 0) { throw $id }
 
 #collect coverage data
-dotnet sql-coverage collect `
-  --connection-string=$conn --database=$db --id=$id `
+dotnet sql-coverage collect --connection-string=$conn --id=$id `
   --html --opencover --sonar --summary --output=testresults
 
 #cleanup
@@ -54,11 +51,11 @@ dotnet sql-coverage stop --connection-string=$conn --id=$id
 
 This is a sample summary from the console and attached is a sample HTML report
 
-![Screenshot](/screenshots/htmlReport.png)
+![Screenshot](./screenshots/htmlReport.png)
 
 This is a screenshot of the terminal summary, created with [Spectre.Console](https://spectreconsole.net/)
 
-![Screenshot](/screenshots/terminalSummary.png)
+![Screenshot](./screenshots/terminalSummary.png)
 
 The OpenCover xml report also exports the source objects that can then be used by [ReportGenerator](https://danielpalme.github.io/ReportGenerator/) to generate a report
 

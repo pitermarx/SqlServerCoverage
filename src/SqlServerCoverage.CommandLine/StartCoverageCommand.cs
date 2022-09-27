@@ -35,9 +35,9 @@ namespace SqlServerCoverage.CommandLine
 
         public override int Execute([NotNull] CommandContext context, [NotNull] Settings settings)
         {
-            var controller = CodeCoverage.NewController(settings.ConnectionString, settings.Database);
-            var session = controller.NewSession();
-            AnsiConsole.Write(session.SessionName);
+            var controller = new CoverageSessionController(settings.ConnectionString);
+            var session = controller.NewSession(settings.Database);
+            AnsiConsole.Write(session.SessionId);
             return 0;
         }
     }

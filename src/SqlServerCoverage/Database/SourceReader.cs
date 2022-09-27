@@ -38,12 +38,12 @@ namespace SqlServerCoverage.Database
                         ON st.object_id = sm.object_id",
                     reader =>
                     {
-                        if (reader.TryGetInt("object_id") is int id &&
-                            reader.TryGetString("object_name") is string name &&
-                            reader.TryGetString("definition") is string text)
+                        if (reader.GetIntOrNull("object_id") is int id &&
+                            reader.GetStringOrNull("object_name") is string name &&
+                            reader.GetStringOrNull("definition") is string text)
                         {
-                            var quoted = reader.TryGetBoolean("uses_quoted_identifier") ?? false;
-                            var type = reader.TryGetString("type") ?? "UNKNOWN";
+                            var quoted = reader.GetBoolOrNull("uses_quoted_identifier") ?? false;
+                            var type = reader.GetStringOrNull("type") ?? "UNKNOWN";
                             var statements = Parse(text, quoted);
                             return new SourceObject(statements, text, name, id, type);
                         }

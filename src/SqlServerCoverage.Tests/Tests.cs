@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using SqlServerCoverage.Data;
+using SqlServerCoverage.Result;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,9 +15,12 @@ namespace SqlServerCoverage.Tests
         [Fact]
         public void DatabaseDoesNotExist()
         {
-            Action a = () => NewCoverageController().NewSession();
-            a.Should().Throw<InvalidOperationException>()
-                .WithMessage("Can't start session on database SqlServerCoverageTest because it does not exist.");
+            Action a = () => NewCoverageController().NewSession(DatabaseName);
+            a.Should()
+                .Throw<InvalidOperationException>()
+                .WithMessage(
+                    "Can't start session on database 'SqlServerCoverageTests' because it does not exist."
+                );
         }
 
         [Fact]
@@ -24,9 +28,12 @@ namespace SqlServerCoverage.Tests
         {
             WithDatabase(() =>
             {
-                Action a = () => NewCoverageController().AttachSession();
-                a.Should().Throw<InvalidOperationException>()
-                    .WithMessage("Can't attach to session SqlServerCoverageTrace-* because it does not exist.");
+                Action a = () => NewCoverageController().AttachSession("asd");
+                a.Should()
+                    .Throw<InvalidOperationException>()
+                    .WithMessage(
+                        "Can't attach to session 'asd' because it does not exist."
+                    );
             });
         }
 
@@ -35,7 +42,7 @@ namespace SqlServerCoverage.Tests
         {
             WithNewSession(session =>
             {
-                session.SessionName.Should().StartWith("SqlServerCoverageTrace-");
+                session.SessionId.Should().StartWith("SqlServerCoverageTrace-");
             });
         }
 
@@ -80,12 +87,15 @@ namespace SqlServerCoverage.Tests
                 obj.IsCovered.Should().Be(true);
                 obj.StatementCount.Should().Be(3);
                 obj.CoveredStatementCount.Should().Be(2);
-                obj.CoveragePercent.Should().Be((2.0/3) * 100);
+                obj.CoveragePercent.Should().Be((2.0 / 3) * 100);
                 obj.Statements.Where(s => s.HitCount == 2).Should().HaveCount(2);
                 obj.Statements
                     .Where(s => s.HitCount == 0)
-                    .Should().ContainSingle()
-                    .Subject.Text.Trim().Should().Be("SELECT 20");
+                    .Should()
+                    .ContainSingle()
+                    .Subject.Text.Trim()
+                    .Should()
+                    .Be("SELECT 20");
 
                 Execute("EXEC TestProcedureForCoverage 2", c => c.ExecuteScalar());
                 session.ReadCoverage().CoveragePercent.Should().Be(100);
@@ -140,15 +150,20 @@ namespace SqlServerCoverage.Tests
             WithDatabase(() =>
             {
                 var controller = NewCoverageController();
-                var session1 = controller.NewSession();
-                var session2 = controller.NewSession();
+                var session1 = controller.NewSession(DatabaseName);
+                var session2 = controller.NewSession(DatabaseName);
                 var sessions = controller.ListSessions();
-                sessions.Should().Contain(session1.SessionName, session2.SessionName);
-                foreach (var session in sessions)
-                    CodeCoverage
-                        .NewController(ConnectionString, DatabaseName, session)
-                        .AttachSession()
-                        .StopSession();
+                sessions
+                    .Select(s => s.sessionId)
+                    .ToArray()
+                    .Should()
+                    .Contain(session1.SessionId, session2.SessionId);
+                foreach (var (sessionId, db) in sessions)
+                {
+                    db.Should().Be(DatabaseName);
+                    var session = new CoverageSessionController(ConnectionString).AttachSession(sessionId);
+                    session.Stop();
+                }
             });
         }
     }
