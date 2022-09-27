@@ -42,5 +42,5 @@ jobs:
         GH_ACCESS_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
       run: |
         cd out/tool
-        dotnet nuget "*.nupkg" --source https://nuget.pkg.github.com/OWNER/index.json --skip-duplicate --api-key $env:GH_ACCESS_TOKEN
-        dotnet nuget "*.nupkg" --source https://api.nuget.org/v3/index.json --skip-duplicate --api-key $env:NUGET_API_KEY
+        dotnet nuget push "*.nupkg" --source https://nuget.pkg.github.com/OWNER/index.json --skip-duplicate --api-key $env:GH_ACCESS_TOKEN
+        dotnet nuget push "*.nupkg" --source https://api.nuget.org/v3/index.json --skip-duplicate --api-key $env:NUGET_API_KEY
