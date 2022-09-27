@@ -17,10 +17,20 @@ jobs:
       with:
         connection-string-env-var: ConnectionStringForTests
           
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Setup .NET
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 5.0.x
     - name: Build
       run: powershell .\scripts\test.ps1
+      
+    - uses: actions/upload-artifact@v3
+      with:
+        name: SqlServerCoverage.CommandLine.nupkg
+        path: out/tool/*.nupkg
+
+    - uses: actions/upload-artifact@v3
+      with:
+        name: TestResults
+        path: out/tests
