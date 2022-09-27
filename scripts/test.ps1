@@ -5,19 +5,19 @@ Write-Information "Running Unit tests"
 $env:DiffEngine_Disabled="true"
 dotnet test ./src/SqlServerCoverage.Tests/
 
-$connection = "Data Source=(local);Integrated Security=True;TrustServerCertificate=True"
+$connection = "${env:ConnectionStringForTests};TrustServerCertificate=True"
 $dbName = "SqlServerCoverageTests"
 $output = "./out/tests"
 
 Write-Host "Ensuring new database"
-Invoke-Sqlcmd -ServerInstance "(local)" -Query "if (select DB_ID('$dbName')) is not null
+Invoke-Sqlcmd -ServerInstance ".\SQLEXPRESS" -Query "if (select DB_ID('$dbName')) is not null
     begin
         alter database [$dbName] set offline with rollback immediate;
         alter database [$dbName] set online;
         drop database [$dbName];
     end";
 
-Invoke-Sqlcmd -ServerInstance "(local)" -Query "CREATE DATABASE [$dbName]";
+Invoke-Sqlcmd -ServerInstance ".\SQLEXPRESS" -Query "CREATE DATABASE [$dbName]";
 
 Write-Host "Starting sessions"
 $id1 = dotnet sql-coverage start --connection-string=$connection --database=$dbName
@@ -41,7 +41,7 @@ if ($LASTEXITCODE -ne 0) { throw $id }
 
 Write-Host "Generating coverage data"
 $null = (Get-Content ./src/SqlServerCoverage.Tests/test_data.sql -Raw) -Split "GO" | % {
-    Invoke-Sqlcmd -ServerInstance "(local)" -Database $dbName -Query $_.Trim()
+    Invoke-Sqlcmd -ServerInstance ".\SQLEXPRESS" -Database $dbName -Query $_.Trim()
 }
 
 dotnet sql-coverage collect `
@@ -51,7 +51,7 @@ dotnet sql-coverage collect `
 Write-Host "Closing sessions"
 dotnet sql-coverage stop --connection-string=$connection --id=$id
 
-$null = Invoke-Sqlcmd -ServerInstance "(local)" -Query "
+$null = Invoke-Sqlcmd -ServerInstance ".\SQLEXPRESS" -Query "
 alter database [$dbName] set offline with rollback immediate;
 alter database [$dbName] set online;
 drop database [$dbName];"

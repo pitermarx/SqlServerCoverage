@@ -1,6 +1,5 @@
-.\scripts\clean.ps1
 $version = .\scripts\get-version.ps1
-Write-Information "Building"
+Write-Information "Building $version"
 dotnet build -c Release -p:Version=$version
 Write-Information "Packing"
 dotnet pack src\SqlServerCoverage.Commandline --no-build -c Release -p:Version=$version
