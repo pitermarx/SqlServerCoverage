@@ -1,9 +1,20 @@
 # SqlServerCoverage
+![Nuget](https://img.shields.io/nuget/v/sqlservercoverage.commandline?label=sql-coverage&style=for-the-badge)
+
 A library and tool to collect SQL coverage data
 
 HEAVILY INSPIRED BY https://github.com/GoEddie/SQLCover
 
 Quoting GoEddie: `What you have looks great, I love the simplicity of OSS and the way it is licensed means you can do what you want :)`
+
+## Quick start
+
+1. Install dotnet tool: `dotnet tool install sqlservercoverage.commandline -g`
+2. Start coverage session: `$id = sql-coverage start --connection-string=$cnx --database=$db`
+3. Collect coverage: `sql-coverage collect --connection-string=$cnx --id=$id --summary`
+4. Cleanup: `sql-coverage stop --connection-string=$cnx --id=$id`
+
+## Documentation
 
 This tool allows us to know how much of the stored procedures are covered by some action
 
@@ -64,7 +75,7 @@ It can also export on the [sonar generic coverage](https://docs.sonarqube.org/la
 # Build and test
 On the root directory just run `.\scripts\build.ps1` to build and `.\scripts\test.ps1` to test
 
-It assumes .net 5.0 and an SQL server instance available at localhost with integrated security
+It assumes .net>=5.0 and an SQL server instance available at localhost with integrated security
 
 the build script will pack and install a local dotnet tool
 
