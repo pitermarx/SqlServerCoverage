@@ -21,6 +21,7 @@ jobs:
     - uses: actions/setup-dotnet@v2
       with:
         dotnet-version: 5.0.x
+
     - name: Build
       run: powershell .\scripts\test.ps1
       
@@ -33,3 +34,9 @@ jobs:
       with:
         name: TestResults
         path: out/tests
+
+    - name: Nuget Push
+      shell: pwsh
+      env:
+        NUGET_API_KEY: ${{ secrets.nuget_api_key }}
+      run: dotnet nuget push out/tool/*.nupkg --skip-duplicate --api-key $env:NUGET_API_KEY

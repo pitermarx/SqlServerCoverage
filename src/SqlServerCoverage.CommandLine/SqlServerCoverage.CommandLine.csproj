@@ -3,7 +3,8 @@
   <PropertyGroup>
 	  <OutputType>Exe</OutputType>
   	<TargetFramework>net5.0</TargetFramework>
-
+    <RollForward>LatestMajor</RollForward>
+    
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>sql-coverage</ToolCommandName>
     <PackageOutputPath>../../out/tool</PackageOutputPath>
