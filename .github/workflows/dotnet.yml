@@ -18,6 +18,10 @@ jobs:
         connection-string-env-var: ConnectionStringForTests
 
     - uses: actions/checkout@v3
+      with:
+        ref: ${{ github.head_ref }}   # checkout the correct branch name
+        fetch-depth: 0                # fetch the whole repo history
+
     - uses: actions/setup-dotnet@v2
       with:
         dotnet-version: 6.0.x
@@ -39,8 +43,6 @@ jobs:
       shell: pwsh
       env:
         NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
-        GH_ACCESS_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
       run: |
         cd out/tool
-        dotnet nuget push "*.nupkg" --source https://nuget.pkg.github.com/pitermarx/index.json --skip-duplicate --api-key $env:GH_ACCESS_TOKEN
         dotnet nuget push "*.nupkg" --source https://api.nuget.org/v3/index.json --skip-duplicate --api-key $env:NUGET_API_KEY
