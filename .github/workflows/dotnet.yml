@@ -9,24 +9,19 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
-    services:
-      mssql:
-        image: mcr.microsoft.com/mssql/server:2019-latest
-        env:
-          SA_PASSWORD: pwd
-          ACCEPT_EULA: 'Y'
-        ports:
-          - 1433:1433
-
+    steps:
+    - name: Install SQL Server
+      uses: Particular/install-sql-server-action@v1.0.0
+      with:
+        connection-string-env-var: ConnectionStringForTests
+          
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.0.x
-      env:
-        ConnectionStringForTests: Server=localhost,1433;Initial Catalog=MyTestDb;User Id=sa;Password=pwd;
     - name: Build
       run: powershell .\scripts\build.ps1
