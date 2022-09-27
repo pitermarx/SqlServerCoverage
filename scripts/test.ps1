@@ -76,7 +76,7 @@ if (!(Get-Command reportgenerator -EA Ignore)) {
     dotnet tool install dotnet-reportgenerator-globaltool
 }
 
-reportgenerator `
+dotnet tool run reportgenerator `
     -reports:$output/$($dbName)_OpenCover.xml `
     -targetdir:$output/opencover `
     -sourcedirs:$output/source `
