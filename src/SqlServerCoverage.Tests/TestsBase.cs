@@ -22,7 +22,9 @@ BEGIN
             SELECT 20
         END
 END";
-        public const string ConnectionString = "Data Source=(local);Integrated Security=True;TrustServerCertificate=True";
+        public const string ConnectionString 
+            => Environment.GetEnvironmentVariable("ConnectionStringForTests")
+                ?? "Data Source=(local);Integrated Security=True;TrustServerCertificate=True";
         public const string DatabaseName = "SqlServerCoverageTests";
 
         protected TestsBase() { }
