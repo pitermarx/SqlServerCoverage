@@ -5,7 +5,12 @@ Write-Information "Running Unit tests"
 $env:DiffEngine_Disabled="true"
 dotnet test ./src/SqlServerCoverage.Tests/
 
-$connection = "${env:ConnectionStringForTests};TrustServerCertificate=True"
+$cnx = $env:ConnectionStringForTests
+if ($cnx -eq $null) {
+    $cnx = "Data Source=(local);Integrated Security=True"
+}
+
+$connection = "$cnx;TrustServerCertificate=True"
 $dbName = "SqlServerCoverageTests"
 $output = "./out/tests"
 

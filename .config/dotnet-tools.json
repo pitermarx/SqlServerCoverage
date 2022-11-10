@@ -2,5 +2,11 @@
   "version": 1,
   "isRoot": true,
   "tools": {
+    "sqlservercoverage.commandline": {
+      "version": "1.2.2",
+      "commands": [
+        "sql-coverage"
+      ]
+    }
   }
 }

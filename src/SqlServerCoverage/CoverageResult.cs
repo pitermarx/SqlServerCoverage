@@ -50,7 +50,7 @@ namespace SqlServerCoverage
         <h1> Coverage Report </h1>
         <p>
             <b>Database: </b> {databaseName}<br>
-            <b>Object Coverage: </b> {(coveredObjects*100)/objectCount:0.00}% <br />
+            <b>Object Coverage: </b> {(coveredObjects * 100) / objectCount:0.00}% <br />
             <b>Statement Coverage: </b> {CoveragePercent:0.00}%
         </p>
         <p> <mark>Attention!</mark> <br>
@@ -76,7 +76,7 @@ namespace SqlServerCoverage
                 <td>{byType.Key}</td>
                 <td>{coveredCount}</td>
                 <td>{uncoveredCount}</td>
-                <td>{(coveredCount*100)/count:0.00}</td>
+                <td>{(coveredCount * 100) / count:0.00}</td>
             </tr>");
             }
 
@@ -335,14 +335,14 @@ namespace SqlServerCoverage
 </CoverageSession>");
         }
 
-        public string GetSonarGenericXml(string basePath = null)
+        public string GetSonarGenericXml(string? basePath = null)
         {
             using var writer = new StringWriter();
             WriteSonarGenericXml(writer, basePath);
             return writer.ToString();
         }
 
-        public void WriteSonarGenericXml(TextWriter writer, string basePath = null)
+        public void WriteSonarGenericXml(TextWriter writer, string? basePath = null)
         {
             writer.Write($@"
 <coverage version=""1"">");
@@ -356,7 +356,7 @@ namespace SqlServerCoverage
 
                 var statements = sourceObj.Statements
                     .GroupBy(s => s.ToLineAndColumn(sourceObj.Text).sl)
-                    .Select(g => new {line = g.Key, isCovered = g.Any(s => s.HitCount > 0)});
+                    .Select(g => new { line = g.Key, isCovered = g.Any(s => s.HitCount > 0) });
 
                 foreach (var s in statements.OrderBy(s => s.line))
                 {

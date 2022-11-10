@@ -7,14 +7,14 @@ namespace SqlServerCoverage.Result
 {
     public static class CoverageResultSonarExtensions
     {
-        public static string GetSonarGenericXml(this CoverageResult result, string basePath = null)
+        public static string GetSonarGenericXml(this CoverageResult result, string? basePath = null)
         {
             using var writer = new StringWriter();
             result.WriteSonarGenericXml(writer, basePath);
             return writer.ToString();
         }
 
-        public static void WriteSonarGenericXml(this CoverageResult result, TextWriter writer, string basePath = null)
+        public static void WriteSonarGenericXml(this CoverageResult result, TextWriter writer, string? basePath = null)
         {
             writer.Write($@"
 <coverage version=""1"">");

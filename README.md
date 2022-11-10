@@ -5,15 +5,24 @@ A library and tool to collect SQL coverage data
 
 HEAVILY INSPIRED BY https://github.com/GoEddie/SQLCover
 
-Quoting GoEddie: `What you have looks great, I love the simplicity of OSS and the way it is licensed means you can do what you want :)`
+Quoting GoEddie:
+> `What you have looks great, I love the simplicity of OSS and the way it is licensed means you can do what you want :)`
 
 ## Quick start
+Assuming powershell
+```ps
+$cs = "your connection string"
+$db = "the database where you want to collect data"
 
-1. Install dotnet tool: `dotnet tool install sqlservercoverage.commandline -g`
-2. Start coverage session: `$id = sql-coverage start --connection-string=$cnx --database=$db`
-3. Collect coverage: `sql-coverage collect --connection-string=$cnx --id=$id --summary`
-4. Cleanup: `sql-coverage stop --connection-string=$cnx --id=$id`
-
+# 1. Install dotnet tool
+dotnet tool install sqlservercoverage.commandline -g
+# 2. Start coverage session
+$id = sql-coverage start --connection-string=$cs --database=$db
+# 3. Collect coverage
+sql-coverage collect --connection-string=$cs --id=$id --summary
+# 4. Cleanup
+sql-coverage stop --connection-string=$cs --id=$id
+```
 ## Documentation
 
 This tool allows us to know how much of the stored procedures are covered by some action

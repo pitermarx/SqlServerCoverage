@@ -1,44 +1,38 @@
-﻿using Spectre.Console.Cli;
-using Spectre.Console;
-using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
+﻿namespace SqlServerCoverage.CommandLine;
 
-namespace SqlServerCoverage.CommandLine
+internal sealed class StopCoverageCommand : Command<StopCoverageCommand.Settings>
 {
-    internal sealed class StopCoverageCommand : Command<StopCoverageCommand.Settings>
+    public sealed class Settings : CommandSettings
     {
-        public sealed class Settings : CommandSettings
+        [Description("The connection string to the SQLServer instance.")]
+        [CommandOption("--connection-string")]
+        public string? ConnectionString { get; init; }
+
+        [Description("The name of session started with the start command.")]
+        [CommandOption("--id")]
+        public string? Id { get; init; }
+
+        public override ValidationResult Validate()
         {
-            [Description("The connection string to the SQLServer instance.")]
-            [CommandOption("--connection-string")]
-            public string ConnectionString { get; init; }
-
-            [Description("The name of session started with the start command.")]
-            [CommandOption("--id")]
-            public string Id { get; init; }
-
-            public override ValidationResult Validate()
+            if (string.IsNullOrEmpty(ConnectionString))
             {
-                if (string.IsNullOrEmpty(ConnectionString))
-                {
-                    return ValidationResult.Error("--connection-string is mandatory");
-                }
-
-                if (string.IsNullOrEmpty(Id))
-                {
-                    return ValidationResult.Error("--id is mandatory");
-                }
-
-                return ValidationResult.Success();
+                return ValidationResult.Error("--connection-string is mandatory");
             }
-        }
 
-        public override int Execute([NotNull] CommandContext context, [NotNull] Settings settings)
-        {
-            var session = new CoverageSessionController(settings.ConnectionString).AttachSession(settings.Id);
-            session.Stop();
-            AnsiConsole.MarkupLine($"Session {settings.Id} stopped");
-            return 0;
+            if (string.IsNullOrEmpty(Id))
+            {
+                return ValidationResult.Error("--id is mandatory");
+            }
+
+            return ValidationResult.Success();
         }
+    }
+
+    public override int Execute([NotNull] CommandContext context, [NotNull] Settings settings)
+    {
+        var session = new CoverageSessionController(settings.ConnectionString!).AttachSession(settings.Id!);
+        session.Stop();
+        AnsiConsole.MarkupLine($"Session {settings.Id} stopped");
+        return 0;
     }
 }

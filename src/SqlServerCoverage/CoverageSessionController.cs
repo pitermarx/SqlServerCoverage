@@ -20,7 +20,7 @@ namespace SqlServerCoverage
             this.connectionString = connectionString;
         }
 
-        public IReadOnlyList<(string sessionId, string database)> ListSessions() =>
+        public IReadOnlyList<(string sessionId, string? database)> ListSessions() =>
             new SessionManager(connectionString).ListSessions();
 
         public CoverageSession NewSession(string databaseName)
@@ -39,6 +39,9 @@ namespace SqlServerCoverage
                 );
 
             var (id, db) = session.ListSessions().First(s => s.sessionId == sessionId);
+
+            if (id is null) throw new Exception($"Session {sessionId} not found");
+            if (db is null) throw new Exception($"Database for session {sessionId} not found");
 
             return new CoverageSession(connectionString, db, id);
         }
