@@ -1,5 +1,5 @@
 # SqlServerCoverage
-![Nuget](https://img.shields.io/nuget/v/sqlservercoverage.commandline?label=sql-coverage&style=for-the-badge)
+[![Nuget](https://img.shields.io/nuget/v/sqlservercoverage.commandline?label=sql-coverage&style=for-the-badge)](https://www.nuget.org/packages/SqlServerCoverage.CommandLine)
 
 A library and tool to collect SQL coverage data
 
