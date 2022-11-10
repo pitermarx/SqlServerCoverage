@@ -14,7 +14,7 @@ public class Program
             config.AddCommand<StopAllCoverageCommand>("stop-all").WithDescription("Stops the all the coverage sessions.");
             config.AddCommand<ListSessionsCommand>("list").WithDescription("Lists the open sessions.");
 
-            config.SetApplicationName("dotnet sql-coverage");
+            config.SetApplicationName("sql-coverage");
             config.AddExample(new[] { "start", "--connection-string=\"Data Source=(local);Integrated Security=True\"", "--database=DatabaseName" });
             config.AddExample(new[] { "collect", "--connection-string=...", "--database=DatabaseName", "--id={ID from start command} --html" });
             config.AddExample(new[] { "stop", "--connection-string=...", "--id={ID from start command}" });

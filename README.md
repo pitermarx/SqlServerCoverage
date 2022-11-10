@@ -58,15 +58,15 @@ $conn = "Data Source=.\SQLEXPRESS;Integrated Security=True"
 $db = "DatabaseName"
 
 #start a session and get the ID
-$id = dotnet sql-coverage start --connection-string=$conn --database=$db
+$id = sql-coverage start --connection-string=$conn --database=$db
 if ($LASTEXITCODE -ne 0) { throw $id }
 
 #collect coverage data
-dotnet sql-coverage collect --connection-string=$conn --id=$id `
+sql-coverage collect --connection-string=$conn --id=$id `
   --html --opencover --sonar --summary --output=testresults
 
 #cleanup
-dotnet sql-coverage stop --connection-string=$conn --id=$id
+sql-coverage stop --connection-string=$conn --id=$id
 ```
 
 This is a sample summary from the console and attached is a sample HTML report

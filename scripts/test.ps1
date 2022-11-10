@@ -25,13 +25,13 @@ Invoke-Sqlcmd -ServerInstance ".\SQLEXPRESS" -Query "if (select DB_ID('$dbName')
 Invoke-Sqlcmd -ServerInstance ".\SQLEXPRESS" -Query "CREATE DATABASE [$dbName]";
 
 Write-Host "Starting sessions"
-$id1 = dotnet sql-coverage start --connection-string=$connection --database=$dbName
+$id1 = dotnet tool run sql-coverage start --connection-string=$connection --database=$dbName
 if ($LASTEXITCODE -ne 0) { throw $id1 }
-$id2 = dotnet sql-coverage start --connection-string=$connection --database=$dbName
+$id2 = dotnet tool run sql-coverage start --connection-string=$connection --database=$dbName
 if ($LASTEXITCODE -ne 0) { throw $id2 }
 
 Write-Host "Listing sessions"
-$sessions = dotnet sql-coverage list --connection-string=$connection
+$sessions = dotnet tool run sql-coverage list --connection-string=$connection
 if (!$sessions.Contains($id1)) { throw "Sessions does not contain ID1" }
 if (!$sessions.Contains($id2)) { throw "Sessions does not contain ID2" }
 
@@ -46,8 +46,8 @@ Invoke-Sqlcmd -ServerInstance ".\SQLEXPRESS" -Query "if (select DB_ID('$dbName-2
 Invoke-Sqlcmd -ServerInstance ".\SQLEXPRESS" -Query "CREATE DATABASE [$dbName-2]";
 
 Write-Host "Starting sessions"
-$id3 = dotnet sql-coverage start --connection-string=$connection --database="$dbName-2"
-$sessions = dotnet sql-coverage list --connection-string=$connection
+$id3 = dotnet tool run sql-coverage start --connection-string=$connection --database="$dbName-2"
+$sessions = dotnet tool run sql-coverage list --connection-string=$connection
 if (!$sessions.Contains($id3)) { throw "Sessions does not contain ID3" }
 
 Write-Host "dropping database"
@@ -59,19 +59,19 @@ Invoke-Sqlcmd -ServerInstance ".\SQLEXPRESS" -Query "if (select DB_ID('$dbName-2
     end";
 
 Write-Host "Stopping all sessions for the missing dbs"
-dotnet sql-coverage stop-all --connection-string=$connection --only-missing-dbs
-$sessions = dotnet sql-coverage list --connection-string=$connection
+dotnet tool run sql-coverage stop-all --connection-string=$connection --only-missing-dbs
+$sessions = dotnet tool run sql-coverage list --connection-string=$connection
 if (!$sessions.Contains($id1)) { throw "Sessions does not contain ID1" }
 if (!$sessions.Contains($id2)) { throw "Sessions does not contain ID2" }
 if ($sessions.Contains($id3)) { throw "Sessions contains ID3" }
 
 Write-Host "Stopping all sessions for the missing dbs"
-dotnet sql-coverage stop-all --connection-string=$connection
-$sessions = dotnet sql-coverage list --connection-string=$connection
+dotnet tool run sql-coverage stop-all --connection-string=$connection
+$sessions = dotnet tool run sql-coverage list --connection-string=$connection
 if ($sessions -ne "No sessions found") { throw "Sessions should have been stopped but were $sessions"}
 
 Write-Host "Starting sessions"
-$id = dotnet sql-coverage start --connection-string=$connection --database=$dbName
+$id = dotnet tool run sql-coverage start --connection-string=$connection --database=$dbName
 if ($LASTEXITCODE -ne 0) { throw $id }
 
 Write-Host "Generating coverage data"
@@ -79,12 +79,12 @@ $null = (Get-Content ./src/SqlServerCoverage.Tests/test_data.sql -Raw) -Split "G
     Invoke-Sqlcmd -ServerInstance ".\SQLEXPRESS" -Database $dbName -Query $_.Trim()
 }
 
-dotnet sql-coverage collect `
+dotnet tool run sql-coverage collect `
     --connection-string=$connection --database=$dbName --id=$id `
     --html --opencover --summary --sonar --output=$output
 
 Write-Host "Closing sessions"
-dotnet sql-coverage stop --connection-string=$connection --id=$id
+dotnet tool run sql-coverage stop --connection-string=$connection --id=$id
 
 $null = Invoke-Sqlcmd -ServerInstance ".\SQLEXPRESS" -Query "
 alter database [$dbName] set offline with rollback immediate;
