@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Description>A dotnet tool that allows you to collect coverage data on a SqlServer database</Description>
     <PackageTags>dotnet tool SqlServer coverage</PackageTags>
-    <PackageReadmeFile>../../README.md</PackageReadmeFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/pitermarx/SqlServerCoverage</RepositoryUrl>
     <PackageProjectUrl>https://github.com/pitermarx/SqlServerCoverage</PackageProjectUrl>
     <Authors>pitermarx</Authors>
@@ -26,6 +26,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SqlServerCoverage\SqlServerCoverage.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="../../README.md" PackagePath=""/>
   </ItemGroup>
 
 </Project>
