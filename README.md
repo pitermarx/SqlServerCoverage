@@ -35,7 +35,7 @@ Unfortunately Views, Scalar functions and inlined table functions are not tracka
 var coverageController = new CoverageSessionController("Data Source=.\SQLEXPRESS;Integrated Security=True");
 
 // Create a new session to collect coverage
-var session = coverageController.StartSession("DatabaseName");
+var session = coverageController.NewSession("DatabaseName");
 
 // Do stufff in the database
 ...
@@ -48,7 +48,7 @@ results.Html();
 results.OpenCoverXml();
 
 // Clean up stuff
-session.StopSession();
+session.Stop();
 ```
 
 There are 3 projects, the unit tests, the lib itself and a command line interface. We can use it like this

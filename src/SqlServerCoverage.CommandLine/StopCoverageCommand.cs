@@ -30,8 +30,7 @@ internal sealed class StopCoverageCommand : Command<StopCoverageCommand.Settings
 
     public override int Execute([NotNull] CommandContext context, [NotNull] Settings settings)
     {
-        var session = new CoverageSessionController(settings.ConnectionString!).AttachSession(settings.Id!);
-        session.Stop();
+        new CoverageSessionController(settings.ConnectionString!).StopSession(settings.Id!);
         AnsiConsole.MarkupLine($"Session {settings.Id} stopped");
         return 0;
     }

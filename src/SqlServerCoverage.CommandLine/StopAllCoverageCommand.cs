@@ -31,8 +31,7 @@ internal sealed class StopAllCoverageCommand : Command<StopAllCoverageCommand.Se
             if (db is not null && settings.OnlyMissingDbs)
                 continue;
 
-            var session = new CoverageSessionController(settings.ConnectionString!).AttachSession(id);
-            session.Stop();
+            new CoverageSessionController(settings.ConnectionString!).StopSession(id);
             AnsiConsole.MarkupLine($"Session {id} stopped");
         }
         return 0;

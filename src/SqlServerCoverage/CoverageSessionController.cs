@@ -30,17 +30,20 @@ namespace SqlServerCoverage
             return new CoverageSession(connectionString, databaseName, sessionId);
         }
 
+        public void StopSession(string sessionId)
+        {
+            new SessionManager(connectionString, sessionId).Drop();
+        }
+
         public CoverageSession AttachSession(string sessionId)
         {
-            var session = new SessionManager(connectionString, sessionId);
-            if (!session.Exists())
-                throw new InvalidOperationException(
+            var (id, db) = new SessionManager(connectionString)
+                .ListSessions()
+                .First(s => s.sessionId == sessionId);
+
+            if (id is null) throw new InvalidOperationException(
                     $"Can't attach to session '{sessionId}' because it does not exist."
                 );
-
-            var (id, db) = session.ListSessions().First(s => s.sessionId == sessionId);
-
-            if (id is null) throw new Exception($"Session {sessionId} not found");
             if (db is null) throw new Exception($"Database for session {sessionId} not found");
 
             return new CoverageSession(connectionString, db, id);
